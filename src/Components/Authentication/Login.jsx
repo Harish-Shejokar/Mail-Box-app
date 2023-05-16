@@ -1,49 +1,49 @@
 import React, { useRef } from "react";
 import { Col, Button, Row, Container, Card, Form } from "react-bootstrap";
 import axios from "axios";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from 'react-router-dom';
 
-const Signup = () => {
+
+const Login = () => {
+    const navigate = useNavigate();
   const emailRef = useRef();
   const passRef = useRef();
-  const confirmPassRef = useRef();
 
-  const signUpOnFirbase = async (email, password) => {
-    console.log(email, password);
-    const url =
-      "https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyAjGOUVjefbMK04WvwbU2wGP4OMSyUetJw";
-    const payLoad = {
-      email,
-      password,
-      returnSecureToken: true,
-    };
-
-    try {
-      const response = await axios.post(url, payLoad);
-
-      if (response.ok) {
-        console.log("sign up successfully");
-      } else {
-        console.log("sign up not ok");
-        console.log(response);
-      }
-    } catch (error) {
-      console.log(error);
+    
+const loginOnFireBase = async (email, password) => {
+  const response = await fetch(
+    "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyAjGOUVjefbMK04WvwbU2wGP4OMSyUetJw",
+    {
+      method: "POST",
+      body: JSON.stringify({
+        email,
+        password,
+        returnSecureToken: true,
+      }),
+      headers: {
+        "Content-Type": "application/json",
+      },
     }
-  };
+  );
 
-  const signupHandler = (e) => {
+  if (response.ok) {
+    console.log("login successfull");
+    const data = await response.json();
+      console.log(data);
+      localStorage.setItem("token", data.idToken);
+      navigate("/")
+  } else {
+    console.log("login failed");
+    alert("INVALID Credentials");
+  }
+};
+    
+  const loginHandler = (e) => {
     e.preventDefault();
     const email = emailRef.current.value;
     const pass = passRef.current.value;
-    const confirmpass = confirmPassRef.current.value;
-    if (pass !== confirmpass) {
-      alert("password not matched!!");
-      return;
-    }
-    // console.log(email, pass, confirmpass);
 
-    signUpOnFirbase(email, pass);
+    loginOnFireBase(email, pass);
   };
 
   return (
@@ -56,7 +56,7 @@ const Signup = () => {
               <Card.Body>
                 <div className="mb-3 mt-md-4">
                   <h2 className="fw-bold mb-2 text-center text-uppercase ">
-                    SignUp
+                    Login
                   </h2>
                   <div className="mb-3">
                     <Form>
@@ -71,7 +71,9 @@ const Signup = () => {
                         />
                       </Form.Group>
 
-                      <Form.Group className="mb-3">
+                      <Form.Group
+                        className="mb-3"
+                      >
                         <Form.Label>Password</Form.Label>
                         <Form.Control
                           ref={passRef}
@@ -79,30 +81,23 @@ const Signup = () => {
                           placeholder="Password"
                         />
                       </Form.Group>
-                      <Form.Group className="mb-3">
-                        <Form.Label>Confirm Password</Form.Label>
-                        <Form.Control
-                          ref={confirmPassRef}
-                          type="password"
-                          placeholder="Password"
-                        />
-                      </Form.Group>
+
                       <Form.Group className="mb-3"></Form.Group>
                       <div className="d-grid">
                         <Button
-                          onClick={signupHandler}
+                          onClick={loginHandler}
                           variant="primary"
                           type="submit"
                         >
-                          Create Account
+                          Login
                         </Button>
                       </div>
                     </Form>
                     <div className="mt-3">
                       <p className="mb-0  text-center">
-                        Already have an account??{" "}
-                        <Link to="/login" className="text-primary fw-bold">
-                          Login
+                        Not have an account??{" "}
+                        <Link to="/signup" className="text-primary fw-bold">
+                          SignUp
                         </Link>
                       </p>
                     </div>
@@ -117,4 +112,4 @@ const Signup = () => {
   );
 };
 
-export default Signup;
+export default Login;
