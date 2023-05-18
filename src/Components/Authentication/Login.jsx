@@ -30,7 +30,8 @@ const loginOnFireBase = async (email, password) => {
     console.log("login successfull");
     const data = await response.json();
       console.log(data);
-      localStorage.setItem("token", data.idToken);
+    localStorage.setItem("token", data.idToken);
+    localStorage.setItem("email", email);
       navigate("/")
   } else {
     console.log("login failed");
