@@ -4,6 +4,7 @@ import Login from './Components/Authentication/Login'
 import Signup from './Components/Authentication/Signup'
 import Header from './Components/Header/Header'
 import Home from './Components/Home/Home'
+import Inbox from './Components/Home/Inbox'
 
 function App() {
   return (
@@ -12,7 +13,9 @@ function App() {
       <Routes>
         <Route path="/" element={<Home/>} exact/>
         <Route path="/signup" element={<Signup/>} exact/>
-        <Route path="/login" element={<Login />} exact/>
+        <Route path="/login" element={<Login />} exact />
+        <Route path="/Inbox" element={<Inbox />} exact />
+  
       </Routes>
     </div>
   );
