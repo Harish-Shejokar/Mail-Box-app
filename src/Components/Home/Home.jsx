@@ -13,7 +13,7 @@ const Home = () => {
   // console.log(unReadEmails);
   const [compose, setCompose] = useState(false);
   // const [inbox, setInBox] = useState(false);
-  const [allEmails, setAllEmails] = useState([]);
+  // const [allEmails, setAllEmails] = useState([]);
   const navigate = useNavigate();
 
   const composeHandler = () => {
@@ -40,7 +40,7 @@ const Home = () => {
         // console.log(item);
       });
       //  console.log(values);
-      setAllEmails(values);
+      // setAllEmails(values);
       dispatch(inboxAction.allEmails(values));
     } catch (error) {
       console.log(error);
@@ -76,7 +76,7 @@ const Home = () => {
             <Link
               style={{ color: "white", textDecoration: "none" }}
               to="/inbox"
-              state={{ emails: allEmails }}
+              // state={{ emails: allEmails }}
             >
               Inbox
               <Badge variant="info">{unReadEmails}</Badge>

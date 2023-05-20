@@ -21,7 +21,7 @@ const Message = () => {
           isWatched: true,
         }
         );
-        console.log("blue dot removed")
+        console.log("messageWatched")
     } catch (error) {
       console.log(error);
     }

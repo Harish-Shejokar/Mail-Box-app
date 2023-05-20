@@ -9,6 +9,33 @@ const ComponseForm = () => {
   const subjectRef = useRef("");
   const [content, setContent] = useState("");
 
+    const storeDataOnFireBase = async (data) => {
+      // const userEmail = localStorage.getItem("email");
+      // const UserEmails = userEmail.replace(/[^a-zA-Z ]/g, "");
+      // console.log(UserEmails);
+
+      try {
+        const resp = await fetch(
+          `https://mailbox-e593a-default-rtdb.firebaseio.com/SentEmail.json`,
+          {
+            method: "POST",
+            body: JSON.stringify(data),
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+
+        if (resp.ok) {
+          console.log("data stored succesfully ");
+        } else {
+          console.log("data not stored ");
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
   const contentHandler = () => {
     if (
       editor.current.value === "" ||

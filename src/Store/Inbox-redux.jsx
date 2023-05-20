@@ -1,7 +1,26 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, current } from "@reduxjs/toolkit";
 import axios from "axios";
+import { useEffect } from "react";
 
-const inboxIntialState = { newMessage: true, emails: [], unReadEmails: 0,firstVisit:0 };
+
+
+const deleteFromFireBase = async (Id) => {
+  console.log("delete from fireBase",Id);
+  const response = await axios.delete(
+    `https://mailbox-e593a-default-rtdb.firebaseio.com/SentEmail/${Id}.json`
+  );
+
+  try {
+    console.log("delete Successful");
+  } catch (error) {
+    console.log(error);
+  }
+
+}
+
+
+
+const inboxIntialState = { newMessage: true, emails: [], unReadEmails: 0, };
 
 const inboxSlice = createSlice({
   name: "inbox",
@@ -23,8 +42,17 @@ const inboxSlice = createSlice({
       // const data = state.emails;
       // console.log(data);
     },
+    deleteEmail(state, action) {
+      const id = action.payload;
+      const data = current(state.emails);
+      console.log(data);
+      state.emails = data.filter(item => {
+        return item.id !== id;
+      })
+      deleteFromFireBase(action.payload);
+    },
     watchedAllEmails(state) {
-      console.log(state.emails);
+      // console.log(current(state.emails));
       // const data = state.emails;
       // const updatedData = data.filter(item => {
       //   if (item.isWatched === false) item.isWatched = true;
