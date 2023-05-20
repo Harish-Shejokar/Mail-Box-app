@@ -1,56 +1,65 @@
-import React, { useState,useEffect } from "react";
-import { Container,Col,Row, Button } from "react-bootstrap";
+import React, { useState, useEffect } from "react";
+import { Container, Col, Row, Button, Badge } from "react-bootstrap";
 import ComponseForm from "./ComposeForm";
-import {  } from "react-router-dom";
-import Inbox from "./Inbox";
+import { useNavigate, Link } from "react-router-dom";
+// import Inbox from "./Inbox";
 import axios from "axios";
+import {inboxAction} from "../../Store/Inbox-redux"
+import { useDispatch, useSelector } from "react-redux";
 
 const Home = () => {
+  const dispatch = useDispatch();
+  const unReadEmails = useSelector(state => state.inbox.unReadEmails);
+  // console.log(unReadEmails);
   const [compose, setCompose] = useState(false);
-  const [inbox, setInBox] = useState(false);
+  // const [inbox, setInBox] = useState(false);
   const [allEmails, setAllEmails] = useState([]);
+  const navigate = useNavigate();
 
   const composeHandler = () => {
-    setCompose(prev => !prev);
-  }
+    setCompose((prev) => !prev);
+  };
 
   const InBoxHandler = () => {
-    setInBox(prev => !prev);
-  }
+    // setInBox(prev => !prev);
+    navigate("/inbox", { state: allEmails });
+  };
 
-   const getAllSentEmails = async () => {
-     try {
-       const response = await axios.get(
-         `https://mailbox-e593a-default-rtdb.firebaseio.com/SentEmail.json`
-       );
+  const getAllSentEmails = async () => {
+    try {
+      const response = await axios.get(
+        `https://mailbox-e593a-default-rtdb.firebaseio.com/SentEmail.json`
+      );
 
-       const data = response.data;
-       const keys = Object.keys(data);
-       const values = Object.values(data);
-       values.forEach((item, index) => {
-         const itemKey = keys[index];
-         item.id = itemKey;
-         // console.log(item);
-       });
+      const data = response.data;
+      const keys = Object.keys(data);
+      const values = Object.values(data);
+      values.forEach((item, index) => {
+        const itemKey = keys[index];
+        item.id = itemKey;
+        // console.log(item);
+      });
       //  console.log(values);
-       setAllEmails(values);
-     } catch (error) {
-       console.log(error);
-     }
-   };
+      setAllEmails(values);
+      dispatch(inboxAction.allEmails(values));
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
-   useEffect(() => {
-     getAllSentEmails();
-   }, []);
+  useEffect(() => {
+   
+    getAllSentEmails();
+  }, []);
 
   return (
-    <Container fluid style={{ margin: "0 -2rem", }}>
+    <Container fluid style={{ margin: "0 -2rem" }}>
       <Row>
         <Col
-          md={1}
+          md={2}
           xs={1}
           bg="light"
-          style={{ marginTop: "-2rem",height:"100vh" ,marginBottom:"-2rem"}}
+          style={{ marginTop: "-2rem", height: "92vh", marginBottom: "-2rem" }}
           className="border border-3"
         >
           <Col className="my-2">
@@ -64,19 +73,27 @@ const Home = () => {
             </Button>
           </Col>
           <Col>
-            <div onClick={InBoxHandler} style={{ color: "white" ,cursor:"pointer"}}>
+            <Link
+              style={{ color: "white", textDecoration: "none" }}
+              to="/inbox"
+              state={{ emails: allEmails }}
+            >
               Inbox
-            </div>
+              <Badge variant="info">{unReadEmails}</Badge>
+            </Link>
+            {/* <div onClick={InBoxHandler} style={{ color: "white" ,cursor:"pointer"}}>
+              Inbox
+            </div> */}
           </Col>
         </Col>
 
-        <Col sm={11}>
+        <Col sm={10}>
           <Container fluid>
             <h1 className="text-center" style={{ color: "white" }}>
               Welcome to Mail-Box
             </h1>
-            {compose  && <ComponseForm />}
-            {inbox && <Inbox emails={allEmails} />}
+            {compose && <ComponseForm />}
+            {/* {inbox && <Inbox emails={allEmails} />} */}
           </Container>
         </Col>
       </Row>
