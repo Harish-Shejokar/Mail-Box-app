@@ -1,10 +1,12 @@
 import { configureStore } from "@reduxjs/toolkit";
 import inboxReducer from './Inbox-redux';
+import authReducer from "./Auth";
 
 
 const Store = configureStore({
     reducer: {
-        inbox:inboxReducer,
+        inbox: inboxReducer,
+        auth:authReducer,
     }
 })
 

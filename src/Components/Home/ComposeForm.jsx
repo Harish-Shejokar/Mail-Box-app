@@ -10,13 +10,14 @@ const ComponseForm = () => {
   const [content, setContent] = useState("");
 
     const storeDataOnFireBase = async (data) => {
-      // const userEmail = localStorage.getItem("email");
-      // const UserEmails = userEmail.replace(/[^a-zA-Z ]/g, "");
-      // console.log(UserEmails);
-
+      const userEmail = localStorage.getItem("email");
+      const UserEmails = userEmail.replace(/[^a-zA-Z ]/g, "");
+      
+     
+      // console.log(obj);
       try {
         const resp = await fetch(
-          `https://mailbox-e593a-default-rtdb.firebaseio.com/SentEmail.json`,
+          `https://mailbox-e593a-default-rtdb.firebaseio.com/AllEmails.json`,
           {
             method: "POST",
             body: JSON.stringify(data),
@@ -50,11 +51,14 @@ const ComponseForm = () => {
     const newString = string.replace(regex, " ");
     const email = emailRef.current.value;
     const subject = subjectRef.current.value;
+    const sender = localStorage.getItem("email");
+    const time = `${new Date().getFullYear()}-${new Date().getMonth()}-${new Date().getDate()}`
     const obj = {
-      email,
+      "sender": sender,
+      "reciver":email,
       subject,
       message: newString,
-      time: new Date(),
+      time,
       isWatched: false,
     };
     console.log(obj);

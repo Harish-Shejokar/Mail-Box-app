@@ -2,12 +2,10 @@ import { createSlice, current } from "@reduxjs/toolkit";
 import axios from "axios";
 import { useEffect } from "react";
 
-
-
 const deleteFromFireBase = async (Id) => {
-  console.log("delete from fireBase",Id);
+  console.log("delete from fireBase", Id);
   const response = await axios.delete(
-    `https://mailbox-e593a-default-rtdb.firebaseio.com/SentEmail/${Id}.json`
+    `https://mailbox-e593a-default-rtdb.firebaseio.com/AllEmails/${Id}.json`
   );
 
   try {
@@ -15,12 +13,16 @@ const deleteFromFireBase = async (Id) => {
   } catch (error) {
     console.log(error);
   }
+};
 
-}
-
-
-
-const inboxIntialState = { newMessage: true, emails: [], unReadEmails: 0, };
+const User = localStorage.getItem("email");
+const inboxIntialState = {
+  emails: [],
+  sentEmails: [],
+  recievedEmails: [],
+  unReadSentEmails: 0,
+  unReadRecievedEmails: 0,
+};
 
 const inboxSlice = createSlice({
   name: "inbox",
@@ -28,38 +30,63 @@ const inboxSlice = createSlice({
   reducers: {
     messageWatched(state) {
       state.newMessage = false;
-      
     },
     allEmails(state, action) {
-      state.emails = action.payload;
-      // console.log(state.emails);
-      const item = state.emails;
+      const allEmails = action.payload;
+      state.recievedEmails = allEmails.filter((item) => item.reciver === User);
+      state.sentEmails = allEmails.filter((item) => item.sender === User);
+      // console.log(state.sentEmails, state.recievedEmails);
+
+      state.emails = allEmails;
+      const t1 = state.recievedEmails;
+      const t2 = state.sentEmails;
       let counter = 0;
-      item.map((elem) => {
+      let counter2 = 0;
+      t1.map((elem) => {
         if (elem.isWatched === false) counter++;
       });
-      state.unReadEmails = counter;
+      t2.map((elem) => {
+        if (elem.isWatched === false) counter2++;
+      });
+      state.unReadRecievedEmails = counter;
+      state.unReadSentEmails = counter2;
+
       // const data = state.emails;
       // console.log(data);
     },
-    deleteEmail(state, action) {
+    deleteSentEmail(state, action) {
       const id = action.payload;
-      const data = current(state.emails);
+      const data = current(state.sentEmails);
       console.log(data);
-      state.emails = data.filter(item => {
+      state.sentEmails = data.filter((item) => {
         return item.id !== id;
-      })
+      });
       deleteFromFireBase(action.payload);
     },
+    deleteRecievedEmail(state, action) {
+        const id = action.payload;
+        const data = current(state.recievedEmails);
+        console.log(data);
+        state.recievedEmails = data.filter((item) => {
+          return item.id !== id;
+        });
+        deleteFromFireBase(action.payload);
+    },
     watchedAllEmails(state) {
-      // console.log(current(state.emails));
-      // const data = state.emails;
-      // const updatedData = data.filter(item => {
-      //   if (item.isWatched === false) item.isWatched = true;
+      const data = current(state.emails);
+      // data.map(item => {
+      //   item.isWatched = false;
       // })
-      // state.emails = updatedData;
-    }
-   
+
+      // console.log(data);
+    },
+    recievedEmails(state) {
+      const data = current(state.emails);
+      const updatedData = data.filter((item) => {
+        return item.reciver !== localStorage.getItem("email");
+      });
+      // console.log(updatedData);
+    },
   },
 });
 

@@ -9,6 +9,8 @@ import { useDispatch, useSelector } from "react-redux";
 
 const Home = () => {
   const dispatch = useDispatch();
+  const unReadSentEmails = useSelector(state => state.inbox.unReadSentEmails);
+  const unReadRecievedEmails = useSelector(state => state.inbox.unReadRecievedEmails);
   const unReadEmails = useSelector(state => state.inbox.unReadEmails);
   // console.log(unReadEmails);
   const [compose, setCompose] = useState(false);
@@ -20,41 +22,39 @@ const Home = () => {
     setCompose((prev) => !prev);
   };
 
-  const InBoxHandler = () => {
-    // setInBox(prev => !prev);
-    navigate("/inbox", { state: allEmails });
-  };
+  // const InBoxHandler = () => {
+  //   // setInBox(prev => !prev);
+  //   navigate("/inbox", { state: allEmails });
+  // };
+ const getAllSentEmails = async () => {
+   try {
+     const response = await axios.get(
+       `https://mailbox-e593a-default-rtdb.firebaseio.com/AllEmails.json`
+     );
 
-  const getAllSentEmails = async () => {
-    try {
-      const response = await axios.get(
-        `https://mailbox-e593a-default-rtdb.firebaseio.com/SentEmail.json`
-      );
+     const data = response.data;
+     const keys = Object.keys(data);
+     const values = Object.values(data);
+     values.forEach((item, index) => {
+       const itemKey = keys[index];
+       item.id = itemKey;
+       // console.log(item);
+     });
+     //  console.log(values);
+     // setAllEmails(values);
+     dispatch(inboxAction.allEmails(values));
+   } catch (error) {
+     console.log(error);
+   }
+ };
 
-      const data = response.data;
-      const keys = Object.keys(data);
-      const values = Object.values(data);
-      values.forEach((item, index) => {
-        const itemKey = keys[index];
-        item.id = itemKey;
-        // console.log(item);
-      });
-      //  console.log(values);
-      // setAllEmails(values);
-      dispatch(inboxAction.allEmails(values));
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  useEffect(() => {
-   
-    getAllSentEmails();
-  }, []);
+ useEffect(() => {
+   getAllSentEmails();
+ }, []);
 
   return (
     <Container fluid style={{ margin: "0 -2rem" }}>
-      <Row>
+      <Row className="text-center">
         <Col
           md={2}
           xs={1}
@@ -72,14 +72,24 @@ const Home = () => {
               componse
             </Button>
           </Col>
-          <Col>
+          <Col className="mb-2">
             <Link
               style={{ color: "white", textDecoration: "none" }}
               to="/inbox"
               // state={{ emails: allEmails }}
             >
               Inbox
-              <Badge variant="info">{unReadEmails}</Badge>
+              <Badge variant="info">{unReadRecievedEmails}</Badge>
+            </Link>
+          </Col>
+          <Col>
+            <Link
+              style={{ color: "white", textDecoration: "none" }}
+              to="/sentbox"
+              // state={{ emails: allEmails }}
+            >
+              Sent
+              <Badge variant="info">{unReadSentEmails}</Badge>
             </Link>
             {/* <div onClick={InBoxHandler} style={{ color: "white" ,cursor:"pointer"}}>
               Inbox
