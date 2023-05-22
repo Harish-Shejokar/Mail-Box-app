@@ -1,7 +1,7 @@
 import React, { useRef, useState } from "react";
 import JoditEditor from "jodit-react";
 import { Button, InputGroup, Form, Container, Col, Row } from "react-bootstrap";
-
+import axios from "axios";
 
 const ComponseForm = () => {
   const editor = useRef(null);
@@ -11,30 +11,27 @@ const ComponseForm = () => {
 
     const storeDataOnFireBase = async (data) => {
       const userEmail = localStorage.getItem("email");
-      const UserEmails = userEmail.replace(/[^a-zA-Z ]/g, "");
-      
-     
-      // console.log(obj);
-      try {
-        const resp = await fetch(
-          `https://mailbox-e593a-default-rtdb.firebaseio.com/AllEmails.json`,
-          {
-            method: "POST",
-            body: JSON.stringify(data),
-            headers: {
-              "Content-Type": "application/json",
-            },
-          }
-        );
+      const Sender = userEmail.replace(/[^a-zA-Z ]/g, "");
 
-        if (resp.ok) {
-          console.log("data stored succesfully ");
-        } else {
-          console.log("data not stored ");
-        }
+      const reciver = data.reciver;
+      const Reciver = reciver.replace(/[^a-zA-Z ]/g, "");
+      // console.log(Sender, Reciver);
+      
+      const postUrlForSender = `https://mailbox-e593a-default-rtdb.firebaseio.com/${Sender}/SentBox.json`;
+      const postUrlForReciver = `https://mailbox-e593a-default-rtdb.firebaseio.com/${Reciver}/Inbox.json`;
+
+      try {
+        const [request1, request2] = await Promise.all([
+          axios.post(postUrlForSender,data),
+          axios.post(postUrlForReciver,data)
+        ])
+
+        console.log("both post successful")
+
       } catch (error) {
         console.log(error);
-      }
+     }
+      
     };
 
   const contentHandler = () => {
@@ -61,7 +58,7 @@ const ComponseForm = () => {
       time,
       isWatched: false,
     };
-    console.log(obj);
+    // console.log(obj);
 
     storeDataOnFireBase(obj);
 
@@ -71,7 +68,7 @@ const ComponseForm = () => {
   };
   return (
     <div className="ms-5">
-      <div>
+      <Row>
         <InputGroup className="">
           <InputGroup.Text id="basic-addon1">@</InputGroup.Text>
           <Form.Control
@@ -99,11 +96,12 @@ const ComponseForm = () => {
             setContent(newContent);
           }}
         />
-      </div>
-
-      <Button className="" onClick={contentHandler}>
-        Send
-      </Button>
+      </Row>
+     
+        <Button variant="info" size="lg" style={{width:"100%"}} className="" onClick={contentHandler}>
+          Send
+        </Button>
+     
     </div>
   );
 };

@@ -1,56 +1,30 @@
 import React, { useState, useEffect } from "react";
-import { Container, Col, Row, Button, Badge } from "react-bootstrap";
+import { Container, Col, Row, Button, Badge, Card } from "react-bootstrap";
 import ComponseForm from "./ComposeForm";
 import { useNavigate, Link } from "react-router-dom";
 // import Inbox from "./Inbox";
 import axios from "axios";
-import {inboxAction} from "../../Store/Inbox-redux"
+import { inboxAction } from "../../Store/Inbox-redux";
 import { useDispatch, useSelector } from "react-redux";
+import { getDataFromFireBase } from "../../Store/ApiCall";
 
 const Home = () => {
   const dispatch = useDispatch();
-  const unReadSentEmails = useSelector(state => state.inbox.unReadSentEmails);
-  const unReadRecievedEmails = useSelector(state => state.inbox.unReadRecievedEmails);
-  const unReadEmails = useSelector(state => state.inbox.unReadEmails);
-  // console.log(unReadEmails);
+  const unReadSentEmails = useSelector((state) => state.inbox.unReadSentEmails);
+  const unReadRecievedEmails = useSelector(
+    (state) => state.inbox.unReadRecievedEmails
+  );
+  // console.log(unReadRecievedEmails, unReadSentEmails);
   const [compose, setCompose] = useState(false);
-  // const [inbox, setInBox] = useState(false);
-  // const [allEmails, setAllEmails] = useState([]);
-  const navigate = useNavigate();
 
   const composeHandler = () => {
     setCompose((prev) => !prev);
   };
 
-  // const InBoxHandler = () => {
-  //   // setInBox(prev => !prev);
-  //   navigate("/inbox", { state: allEmails });
-  // };
- const getAllSentEmails = async () => {
-   try {
-     const response = await axios.get(
-       `https://mailbox-e593a-default-rtdb.firebaseio.com/AllEmails.json`
-     );
 
-     const data = response.data;
-     const keys = Object.keys(data);
-     const values = Object.values(data);
-     values.forEach((item, index) => {
-       const itemKey = keys[index];
-       item.id = itemKey;
-       // console.log(item);
-     });
-     //  console.log(values);
-     // setAllEmails(values);
-     dispatch(inboxAction.allEmails(values));
-   } catch (error) {
-     console.log(error);
-   }
- };
-
- useEffect(() => {
-   getAllSentEmails();
- }, []);
+  useEffect(() => {
+    dispatch(getDataFromFireBase());
+  }, []);
 
   return (
     <Container fluid style={{ margin: "0 -2rem" }}>
@@ -98,10 +72,20 @@ const Home = () => {
         </Col>
 
         <Col sm={10}>
+          {!compose && (
+            <div className="d-flex justify-content-center">
+              <Card style={{ width: "30rem" }}>
+                <Card.Body>
+                  <Card.Title className="display-5">
+                    Welcome to Mail-Box
+                  </Card.Title>
+                  <Card.Text></Card.Text>
+                  {/* <Button variant="primary">Go somewhere</Button> */}
+                </Card.Body>
+              </Card>
+            </div>
+          )}
           <Container fluid>
-            <h1 className="text-center" style={{ color: "white" }}>
-              Welcome to Mail-Box
-            </h1>
             {compose && <ComponseForm />}
             {/* {inbox && <Inbox emails={allEmails} />} */}
           </Container>

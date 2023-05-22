@@ -12,39 +12,15 @@ import { Link, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { inboxAction } from "../../Store/Inbox-redux";
 import axios from "axios";
+import { getDataFromFireBase } from "../../Store/ApiCall";
 
 const Inbox = () => {
   const dispatch = useDispatch();
-  // const location = useLocation();
-  // const { emails } = location.state;
 
   const emails = useSelector((state) => state.inbox.sentEmails);
 
-  const getAllSentEmails = async () => {
-    try {
-      const response = await axios.get(
-        `https://mailbox-e593a-default-rtdb.firebaseio.com/AllEmails.json`
-      );
-
-      const data = response.data;
-      const keys = Object.keys(data);
-
-      const values = Object.values(data);
-      values.map((item, index) => {
-        const itemKey = keys[index];
-        item.id = itemKey;
-        // console.log(itemKey);
-      });
-      //  console.log(values);
-      // setAllEmails(values);
-      dispatch(inboxAction.allEmails(values));
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   useEffect(() => {
-    getAllSentEmails();
+    dispatch(getDataFromFireBase());
   }, []);
 
   const watchedAllEmails = async () => {
@@ -68,7 +44,7 @@ const Inbox = () => {
 
   useEffect(() => {
     // console.log(emails);
-    watchedAllEmails(emails);
+    // watchedAllEmails(emails);
   }, []);
 
   return (
@@ -91,7 +67,7 @@ const Inbox = () => {
                           <Link
                             to="/message"
                             key={item.id}
-                            state={item}
+                            state={{ ...item, Box: "SentBox" }}
                             style={{ textDecoration: "none" }}
                           >
                             <div

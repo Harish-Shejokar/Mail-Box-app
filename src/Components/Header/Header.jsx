@@ -1,8 +1,11 @@
 import React from "react";
 import { Navbar, Container, Nav } from "react-bootstrap";
 import { NavLink } from "react-router-dom";
+import { authAction } from "../../Store/Auth";
+import { useDispatch } from "react-redux";
 
 const Header = () => {
+  const dispatch = useDispatch();
   return (
     <div
       style={{ margin: "-2rem", marginBottom: "2rem", background: "purple" }}
@@ -30,10 +33,15 @@ const Header = () => {
             </NavLink>
             <NavLink
               className="ms-2"
-              to="/"
+              to="/login"
               style={{ color: "black", textDecoration: "none" }}
+              onClick={() => {
+                localStorage.clear();
+                dispatch(authAction.loggedOut());
+              }}
             >
-              Services
+             
+              LogOut
             </NavLink>
             {/* <Nav.Link href="/">Home</Nav.Link>
             <Nav.Link href="#features">Features</Nav.Link>

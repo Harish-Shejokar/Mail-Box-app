@@ -1,24 +1,51 @@
+import { inboxAction } from "./Inbox-redux";
+import axios from "axios";
 
+export const getDataFromFireBase = () => {
+  return async (dispatch) => {
+    const getAllSentEmails = async () => {
+      const userEmail = localStorage.getItem("email");
+      const UserEmail = userEmail.replace(/[^a-zA-Z ]/g, "");
 
-export const removeBlueDots = () => {
-    return async () => {
-        const updateWindowProperty = async() => {
-            try {
-                const response = await fetch(
-                    `https://mailbox-e593a-default-rtdb.firebaseio.com/SentEmail.json`,
-                    {
-                        method: "PUT",
-                        body: JSON.stringify({
-                            
-                        }),
-                        headers: {
-                            "Content-Type":"application/json",
-                        }
-                    }
-                );
-            } catch (error) {
-                console.log(error);
-            }
-        }
-    }
-}
+      const sentUrl = `https://mailbox-e593a-default-rtdb.firebaseio.com/${UserEmail}/SentBox.json`;
+      const recivedUrl = `https://mailbox-e593a-default-rtdb.firebaseio.com/${UserEmail}/Inbox.json`;
+
+      try {
+        const [Inbox, SentBox] = await Promise.all([
+          axios.get(recivedUrl),
+          axios.get(sentUrl),
+        ]);
+
+        const inboxData = Inbox.data;
+        const sentBoxData = SentBox.data;
+        // console.log(inboxData);
+
+        //Inbox operation -------------------------
+        const inboxkeys = Object.keys(inboxData);
+        const inboxvalues = Object.values(inboxData);
+        inboxvalues.forEach((item, index) => {
+          const itemKey = inboxkeys[index];
+          item.id = itemKey;
+          // console.log(item);
+        });
+        // console.log(inboxvalues);
+
+        // SentBox operation ----------------------------
+        const sentkeys = Object.keys(sentBoxData);
+        const sentvalues = Object.values(sentBoxData);
+        sentvalues.forEach((item, index) => {
+          const itemKey = sentkeys[index];
+          item.id = itemKey;
+          // console.log(item);
+        });
+        // console.log(sentvalues);
+
+        dispatch(inboxAction.inboxEmails(inboxvalues));
+        dispatch(inboxAction.sentBoxEmails(sentvalues));
+      } catch (error) {
+        console.log(error);
+      }
+      };
+      getAllSentEmails();
+  };
+};

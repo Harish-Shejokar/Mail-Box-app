@@ -1,12 +1,13 @@
 import React, { useRef } from "react";
 import { Col, Button, Row, Container, Card, Form } from "react-bootstrap";
 import axios from "axios";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const Signup = () => {
   const emailRef = useRef();
   const passRef = useRef();
   const confirmPassRef = useRef();
+  const navigate = useNavigate();
 
   const signUpOnFirbase = async (email, password) => {
     console.log(email, password);
@@ -21,12 +22,9 @@ const Signup = () => {
     try {
       const response = await axios.post(url, payLoad);
 
-      if (response.ok) {
         console.log("sign up successfully");
-      } else {
-        console.log("sign up not ok");
-        console.log(response);
-      }
+        navigate("/login");
+        // console.log(response);
     } catch (error) {
       console.log(error);
     }
@@ -49,7 +47,7 @@ const Signup = () => {
   return (
     <div>
       <Container bg="dark" variant="dark" className="">
-        <Row className="vh-100 d-flex justify-content-center align-items-center">
+        <Row className="vh-90 d-flex justify-content-center align-items-center">
           <Col md={8} lg={6} xs={12}>
             <div className="border border-2 border-primary"></div>
             <Card className="shadow px-4">

@@ -2,9 +2,12 @@ import React, { useRef } from "react";
 import { Col, Button, Row, Container, Card, Form } from "react-bootstrap";
 import axios from "axios";
 import { Link, useNavigate } from 'react-router-dom';
+import { authAction } from "../../Store/Auth";
+import { useDispatch } from "react-redux";
 
 
 const Login = () => {
+  const dispatch = useDispatch();
     const navigate = useNavigate();
   const emailRef = useRef();
   const passRef = useRef();
@@ -29,10 +32,11 @@ const loginOnFireBase = async (email, password) => {
   if (response.ok) {
     console.log("login successfull");
     const data = await response.json();
-      console.log(data);
+    console.log(data);
+    dispatch(authAction.loggedIn());
     localStorage.setItem("token", data.idToken);
     localStorage.setItem("email", email);
-      navigate("/")
+    navigate("/")
   } else {
     console.log("login failed");
     alert("INVALID Credentials");
@@ -50,7 +54,7 @@ const loginOnFireBase = async (email, password) => {
   return (
     <div>
       <Container bg="dark" variant="dark" className="">
-        <Row className="vh-100 d-flex justify-content-center align-items-center">
+        <Row className="vh-90 d-flex justify-content-center align-items-center">
           <Col md={8} lg={6} xs={12}>
             <div className="border border-2 border-primary"></div>
             <Card className="shadow px-4">

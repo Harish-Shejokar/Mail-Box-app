@@ -1,45 +1,19 @@
-import React,{useEffect} from "react";
-import { Card, Row, Col,ListGroup,Button } from "react-bootstrap";
+import React, { useEffect } from "react";
+import { Card, Row, Col, ListGroup, Button } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { inboxAction } from "../../Store/Inbox-redux";
-import { Link } from "react-router-dom"
+import { Link } from "react-router-dom";
 import axios from "axios";
+import { getDataFromFireBase } from "../../Store/ApiCall";
 
 const Inbox = () => {
-    const dispatch = useDispatch();
-    const emails = useSelector(state => state.inbox.recievedEmails);
-  dispatch(inboxAction.recievedEmails());
+  const dispatch = useDispatch();
+  const emails = useSelector((state) => state.inbox.recievedEmails);
   
-
-  
-  const getAllRecievedEmails = async () => {
-    try {
-      const response = await axios.get(
-        `https://mailbox-e593a-default-rtdb.firebaseio.com/AllEmails.json`
-      );
-
-      const data = response.data;
-      const keys = Object.keys(data);
-
-      const values = Object.values(data);
-      values.map((item, index) => {
-        const itemKey = keys[index];
-        item.id = itemKey;
-        // console.log(itemKey);
-      });
-      //  console.log(values);
-      // setAllEmails(values);
-      dispatch(inboxAction.allEmails(values));
-    } catch (error) {
-      console.log(error);
-    }
-  };
 
   useEffect(() => {
-    getAllRecievedEmails();
-    
+    dispatch(getDataFromFireBase());
   }, []);
-
 
   return (
     <div>
@@ -61,7 +35,7 @@ const Inbox = () => {
                           <Link
                             to="/message"
                             key={item.id}
-                            state={item}
+                            state={{ ...item, Box: "Inbox" }}
                             style={{ textDecoration: "none" }}
                           >
                             <div

@@ -5,15 +5,20 @@ import axios from "axios";
 
 const Message = () => {
   const location = useLocation();
-  const { email, subject, message, isWatched, id,time } = location.state;
-  //   console.log(message, email, subject,isWatched,id);
+
+  const { sender,reciver, subject, message, isWatched, id,time,Box } = location.state;
+    // console.log(sender , reciver, message, subject,isWatched,id,Box);
 
   const emailWatched = async () => {
+    const email = (Box === "Inbox") ? reciver : sender;
+    const Email = email.replace(/[^a-zA-Z ]/g, "");
+    console.log(Email, id);
     try {
       const response = await axios.put(
-        `https://mailbox-e593a-default-rtdb.firebaseio.com/SentEmail/${id}.json`,
+        `https://mailbox-e593a-default-rtdb.firebaseio.com/${Email}/${Box}/${id}.json`,
         {
-          email,
+          sender,
+          reciver,
           subject,
           message,
          id,
@@ -26,7 +31,7 @@ const Message = () => {
       console.log(error);
     }
     };
-    if (!isWatched) emailWatched();
+     emailWatched();
 
   return (
     <div
@@ -35,7 +40,8 @@ const Message = () => {
     >
       <div className="d-flex justify-content-around me-4">
         <span>Email:</span>
-        <span>{email}</span>
+        {Box === "Inbox" && <span>{sender}</span>}
+        {Box === "SentBox" && <span>{reciver}</span>}
         <div>
           <span>Subject:</span>
           <span> {subject}</span>
