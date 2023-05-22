@@ -15,9 +15,9 @@ const Inbox = () => {
   
 
   useEffect(() => {
-    setInterval(() => {
-      dispatch(getDataFromFireBase());
-    }, 3000);
+    // setInterval(() => {
+    //   dispatch(getDataFromFireBase());
+    // }, 3000);
   }, []);
 
   return (

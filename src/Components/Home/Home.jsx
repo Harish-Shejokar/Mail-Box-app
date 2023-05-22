@@ -26,7 +26,7 @@ const Home = () => {
     const Id = setInterval(() => {
       // console.log(Math.random().toFixed(2));
       dispatch(getDataFromFireBase());
-    }, 3000)
+    }, 2000)
     // clearInterval(Id);
   }, []);
 
