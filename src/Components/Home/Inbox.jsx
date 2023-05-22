@@ -4,7 +4,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { inboxAction } from "../../Store/Inbox-redux";
 import { Link } from "react-router-dom";
 import axios from "axios";
-import { getDataFromFireBase } from "../../Store/ApiCall";
+import {
+  getDataFromFireBase,
+  deleteDataFromFireBase,
+} from "../../Store/ApiCall";
 
 const Inbox = () => {
   const dispatch = useDispatch();
@@ -12,7 +15,9 @@ const Inbox = () => {
   
 
   useEffect(() => {
-    dispatch(getDataFromFireBase());
+    setInterval(() => {
+      dispatch(getDataFromFireBase());
+    }, 3000);
   }, []);
 
   return (
@@ -65,9 +70,12 @@ const Inbox = () => {
                         </Col>
                         <Button
                           id={item.id}
-                          onClick={() =>
-                            dispatch(inboxAction.deleteRecievedEmail(item.id))
-                          }
+                          onClick={() => {
+                            dispatch(inboxAction.deleteRecievedEmail(item.id));
+                            dispatch(
+                              deleteDataFromFireBase("Inbox", item.id)
+                            );
+                          }}
                           variant="outline-danger"
                         >
                           Delete

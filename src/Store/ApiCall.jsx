@@ -1,11 +1,13 @@
 import { inboxAction } from "./Inbox-redux";
 import axios from "axios";
 
+const userEmail = localStorage.getItem("email");
+const UserEmail = userEmail.replace(/[^a-zA-Z ]/g, "");
+
+
 export const getDataFromFireBase = () => {
   return async (dispatch) => {
     const getAllSentEmails = async () => {
-      const userEmail = localStorage.getItem("email");
-      const UserEmail = userEmail.replace(/[^a-zA-Z ]/g, "");
 
       const sentUrl = `https://mailbox-e593a-default-rtdb.firebaseio.com/${UserEmail}/SentBox.json`;
       const recivedUrl = `https://mailbox-e593a-default-rtdb.firebaseio.com/${UserEmail}/Inbox.json`;
@@ -49,3 +51,33 @@ export const getDataFromFireBase = () => {
       getAllSentEmails();
   };
 };
+
+
+export const deleteDataFromFireBase = (Box, Id) => {
+  console.log(Box, Id);
+  return async () => {
+    const request = async () => {
+      console.log("delete from fireBase", Id);
+      const response = await axios.delete(
+        `https://mailbox-e593a-default-rtdb.firebaseio.com/${UserEmail}/${Box}/${Id}.json`
+      );
+
+      try {
+        console.log("delete Successful");
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    request();
+  };
+};
+
+
+export const watchedAllEmails = (Box) => {
+  return async () => {
+    const request = async() => {
+       const response = await axios.put(`https://mailbox-e593a-default-rtdb.firebaseio.com/${UserEmail}/${Box}`)
+    }
+    // request();
+  }
+}

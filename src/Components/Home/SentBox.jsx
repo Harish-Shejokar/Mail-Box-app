@@ -12,40 +12,28 @@ import { Link, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { inboxAction } from "../../Store/Inbox-redux";
 import axios from "axios";
-import { getDataFromFireBase } from "../../Store/ApiCall";
+import {
+  getDataFromFireBase,
+  deleteDataFromFireBase,
+} from "../../Store/ApiCall";
 
 const Inbox = () => {
   const dispatch = useDispatch();
 
   const emails = useSelector((state) => state.inbox.sentEmails);
 
-  useEffect(() => {
-    dispatch(getDataFromFireBase());
-  }, []);
-
-  const watchedAllEmails = async () => {
-    // console.log(emails);
-    dispatch(inboxAction.watchedAllEmails());
-    // try {
-    //   const response = await fetch(
-    //     `https://mailbox-e593a-default-rtdb.firebaseio.com/SentEmail.json`,
-    //     {
-    //       method: "PUT",
-    //       body: JSON.stringify(emails),
-    //       headers: {
-    //         "Content-Type": "application/json",
-    //       },
-    //     }
-    //   );
-    // } catch (error) {
-    //   console.log(error);
-    // }
+  const deleteHandler = () => {
+    console.log("delte");
   };
 
   useEffect(() => {
-    // console.log(emails);
-    // watchedAllEmails(emails);
+    setInterval(() => {
+      dispatch(getDataFromFireBase());
+      
+    },3000)
   }, []);
+
+  useEffect(() => {}, []);
 
   return (
     <Card bg="info">
@@ -97,9 +85,12 @@ const Inbox = () => {
                         </Col>
                         <Button
                           id={item.id}
-                          onClick={() =>
-                            dispatch(inboxAction.deleteSentEmail(item.id))
-                          }
+                          onClick={() => {
+                            dispatch(inboxAction.deleteSentEmail(item.id));
+                            dispatch(
+                              deleteDataFromFireBase("SentBox", item.id)
+                            );
+                          }}
                           variant="outline-danger"
                         >
                           Delete

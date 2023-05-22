@@ -2,18 +2,7 @@ import { createSlice, current } from "@reduxjs/toolkit";
 import axios from "axios";
 import { useEffect } from "react";
 
-const deleteFromFireBase = async (Id) => {
-  console.log("delete from fireBase", Id);
-  const response = await axios.delete(
-    `https://mailbox-e593a-default-rtdb.firebaseio.com/AllEmails/${Id}.json`
-  );
 
-  try {
-    console.log("delete Successful");
-  } catch (error) {
-    console.log(error);
-  }
-};
 
 // const User = localStorage.getItem("email");
 const inboxIntialState = {
@@ -49,29 +38,23 @@ const inboxSlice = createSlice({
       state.unReadSentEmails = counter2;
     },
     deleteSentEmail(state, action) {
-      // const id = action.payload;
-      // const data = current(state.sentEmails);
+      const id = action.payload;
+      const data = current(state.sentEmails);
       // console.log(data);
-      // state.sentEmails = data.filter((item) => {
-      //   return item.id !== id;
-      // });
-      // deleteFromFireBase(action.payload);
+      state.sentEmails = data.filter((item) => {
+        return item.id !== id;
+      });
     },
     deleteRecievedEmail(state, action) {
       const id = action.payload;
-      // const data = current(state.recievedEmails);
+      const data = current(state.recievedEmails);
       // console.log(data);
-      // state.recievedEmails = data.filter((item) => {
-      //   return item.id !== id;
-      // });
-      // deleteFromFireBase(action.payload);
+      state.recievedEmails = data.filter((item) => {
+        return item.id !== id;
+      });
     },
-    watchedAllEmails(state,action) {
-      
-    },
-    watchedParicularEmail(state, action) {
-      
-    }
+   
+   
     
   },
 });

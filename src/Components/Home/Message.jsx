@@ -31,7 +31,7 @@ const Message = () => {
       console.log(error);
     }
     };
-     emailWatched();
+     if(!isWatched)emailWatched();
 
   return (
     <div

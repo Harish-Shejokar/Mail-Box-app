@@ -23,7 +23,11 @@ const Home = () => {
 
 
   useEffect(() => {
-    dispatch(getDataFromFireBase());
+    const Id = setInterval(() => {
+      // console.log(Math.random().toFixed(2));
+      dispatch(getDataFromFireBase());
+    }, 3000)
+    // clearInterval(Id);
   }, []);
 
   return (
