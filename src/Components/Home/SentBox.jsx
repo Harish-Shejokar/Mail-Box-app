@@ -28,9 +28,9 @@ const Inbox = () => {
 
   useEffect(() => {
     // setInterval(() => {
-    //   dispatch(getDataFromFireBase());
       
-    // },3000)
+      // },3000)
+        dispatch(getDataFromFireBase());
   }, []);
 
   useEffect(() => {}, []);
@@ -62,7 +62,7 @@ const Inbox = () => {
                               className="d-flex justify-content-between"
                               style={{ color: "black" }}
                             >
-                              {!item.isWatched && (
+                              {/* {!item.isWatched && (
                                 <span
                                   style={{
                                     backgroundColor: "blue",
@@ -72,7 +72,7 @@ const Inbox = () => {
                                   }}
                                   className="mx-2 mt-2"
                                 ></span>
-                              )}
+                              )} */}
                               {/* <Badge bg="info" style={{color:"skyblue"}}>0</Badge> */}
                               <Col>{item.reciver}</Col>
                               <Col> {item.subject}</Col>

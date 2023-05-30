@@ -1,11 +1,12 @@
 import { inboxAction } from "./Inbox-redux";
 import axios from "axios";
 
-const userEmail = localStorage.getItem("email");
-const UserEmail = userEmail.replace(/[^a-zA-Z ]/g, "");
 
 
 export const getDataFromFireBase = () => {
+  const userEmail = localStorage.getItem("email");
+  const UserEmail = userEmail.replace(/[^a-zA-Z ]/g, "");
+  console.log(userEmail);
   return async (dispatch) => {
     const getAllSentEmails = async () => {
 
@@ -54,6 +55,9 @@ export const getDataFromFireBase = () => {
 
 
 export const deleteDataFromFireBase = (Box, Id) => {
+  const userEmail = localStorage.getItem("email");
+  const UserEmail = userEmail.replace(/[^a-zA-Z ]/g, "");
+
   console.log(Box, Id);
   return async () => {
     const request = async () => {

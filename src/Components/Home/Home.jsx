@@ -23,10 +23,9 @@ const Home = () => {
 
 
   useEffect(() => {
-    const Id = setInterval(() => {
-      // console.log(Math.random().toFixed(2));
-      dispatch(getDataFromFireBase());
-    }, 2000)
+    // const Id = setInterval(() => {
+    // }, 2000)
+    dispatch(getDataFromFireBase());
     // clearInterval(Id);
   }, []);
 
@@ -67,7 +66,7 @@ const Home = () => {
               // state={{ emails: allEmails }}
             >
               Sent
-              <Badge variant="info">{unReadSentEmails}</Badge>
+              {/* <Badge variant="info">{unReadSentEmails}</Badge> */}
             </Link>
             {/* <div onClick={InBoxHandler} style={{ color: "white" ,cursor:"pointer"}}>
               Inbox
