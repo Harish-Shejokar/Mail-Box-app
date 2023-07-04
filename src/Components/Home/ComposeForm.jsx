@@ -9,30 +9,28 @@ const ComponseForm = () => {
   const subjectRef = useRef("");
   const [content, setContent] = useState("");
 
-    const storeDataOnFireBase = async (data) => {
-      const userEmail = localStorage.getItem("email");
-      const Sender = userEmail.replace(/[^a-zA-Z ]/g, "");
+  const storeDataOnFireBase = async (data) => {
+    const userEmail = localStorage.getItem("email");
+    const Sender = userEmail.replace(/[^a-zA-Z ]/g, "");
 
-      const reciver = data.reciver;
-      const Reciver = reciver.replace(/[^a-zA-Z ]/g, "");
-      // console.log(Sender, Reciver);
-      
-      const postUrlForSender = `https://mailbox-e593a-default-rtdb.firebaseio.com/${Sender}/SentBox.json`;
-      const postUrlForReciver = `https://mailbox-e593a-default-rtdb.firebaseio.com/${Reciver}/Inbox.json`;
+    const reciver = data.reciver;
+    const Reciver = reciver.replace(/[^a-zA-Z ]/g, "");
+    // console.log(Sender, Reciver);
 
-      try {
-        const [request1, request2] = await Promise.all([
-          axios.post(postUrlForSender,data),
-          axios.post(postUrlForReciver,data)
-        ])
+    const postUrlForSender = `https://mail-box-client-database-86603-default-rtdb.firebaseio.com/${Sender}/SentBox.json`;
+    const postUrlForReciver = `https://mail-box-client-database-86603-default-rtdb.firebaseio.com/${Reciver}/Inbox.json`;
 
-        console.log("both post successful")
+    try {
+      const [request1, request2] = await Promise.all([
+        axios.post(postUrlForSender, data),
+        axios.post(postUrlForReciver, data),
+      ]);
 
-      } catch (error) {
-        console.log(error);
-     }
-      
-    };
+      console.log("both post successful");
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const contentHandler = () => {
     if (
@@ -49,10 +47,10 @@ const ComponseForm = () => {
     const email = emailRef.current.value;
     const subject = subjectRef.current.value;
     const sender = localStorage.getItem("email");
-    const time = `${new Date().getFullYear()}-${new Date().getMonth()}-${new Date().getDate()}`
+    const time = `${new Date().getFullYear()}-${new Date().getMonth()}-${new Date().getDate()}`;
     const obj = {
-      "sender": sender,
-      "reciver":email,
+      sender: sender,
+      reciver: email,
       subject,
       message: newString,
       time,
@@ -97,11 +95,16 @@ const ComponseForm = () => {
           }}
         />
       </Row>
-     
-        <Button variant="info" size="lg" style={{width:"100%"}} className="" onClick={contentHandler}>
-          Send
-        </Button>
-     
+
+      <Button
+        variant="info"
+        size="lg"
+        style={{ width: "100%" }}
+        className=""
+        onClick={contentHandler}
+      >
+        Send
+      </Button>
     </div>
   );
 };

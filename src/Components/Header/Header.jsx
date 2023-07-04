@@ -3,49 +3,38 @@ import { Navbar, Container, Nav } from "react-bootstrap";
 import { NavLink } from "react-router-dom";
 import { authAction } from "../../Store/Auth";
 import { useDispatch } from "react-redux";
+import { inboxAction } from "../../Store/Inbox-redux";
 
 const Header = () => {
   const dispatch = useDispatch();
   return (
     <div
-      style={{ margin: "-2rem", marginBottom: "2rem", background: "purple" }}
+      style={{ margin: "-2rem", marginBottom: "2rem", }}
     >
-      <Navbar bg="info" variant="light">
-        <Container>
-          <Navbar.Brand>
-            MailBox
-            {/* <NavLink to="/" style={{color:"black",textDecoration:"none"}}>Mail-Box</NavLink> */}
-          </Navbar.Brand>
-          <Nav className="me-auto">
+      <Navbar bg="info" variant="light" className="py-3 fs-4 ">
+        <Container  className="d-flex justify-content-around ">
+          <Nav className="">
             <NavLink
-              className=""
+              className="fw-bold"
               to="/"
               style={{ color: "black", textDecoration: "none" }}
             >
               Home
             </NavLink>
+          </Nav>
+          <Nav>
             <NavLink
-              className="ms-2"
-              to="/"
-              style={{ color: "black", textDecoration: "none" }}
-            >
-              Features
-            </NavLink>
-            <NavLink
-              className="ms-2"
+               className="fw-bold"
               to="/login"
               style={{ color: "black", textDecoration: "none" }}
               onClick={() => {
                 localStorage.clear();
+                dispatch(inboxAction.emptyInboxSentbox());
                 dispatch(authAction.loggedOut());
               }}
             >
-             
               LogOut
             </NavLink>
-            {/* <Nav.Link href="/">Home</Nav.Link>
-            <Nav.Link href="#features">Features</Nav.Link>
-            <Nav.Link href="#pricing">Pricing</Nav.Link> */}
           </Nav>
         </Container>
       </Navbar>

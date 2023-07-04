@@ -3,25 +3,23 @@ import { Card, Row, Col, ListGroup, Button } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { inboxAction } from "../../Store/Inbox-redux";
 import { Link } from "react-router-dom";
-import axios from "axios";
 import {
   getDataFromFireBase,
   deleteDataFromFireBase,
 } from "../../Store/ApiCall";
 
 const Inbox = () => {
+ 
   const dispatch = useDispatch();
   const emails = useSelector((state) => state.inbox.recievedEmails);
   
+     
 
   useEffect(() => {
-    // setInterval(() => {
-      // }, 3000);
-        dispatch(getDataFromFireBase());
+    // dispatch(getDataFromFireBase("Inbox"));
   }, []);
 
   return (
-    <div>
       <Card bg="warning">
         <Card.Body>
           <Row>
@@ -89,7 +87,7 @@ const Inbox = () => {
           </Row>
         </Card.Body>
       </Card>
-    </div>
+    
   );
 };
 

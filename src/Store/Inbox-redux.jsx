@@ -1,8 +1,4 @@
 import { createSlice, current } from "@reduxjs/toolkit";
-import axios from "axios";
-import { useEffect } from "react";
-
-
 
 // const User = localStorage.getItem("email");
 const inboxIntialState = {
@@ -10,6 +6,9 @@ const inboxIntialState = {
   recievedEmails: [],
   unReadSentEmails: 0,
   unReadRecievedEmails: 0,
+  inbox: false,
+  sentbox: false,
+  compose : true,
 };
 
 const inboxSlice = createSlice({
@@ -18,7 +17,7 @@ const inboxSlice = createSlice({
   reducers: {
     inboxEmails(state, action) {
       state.recievedEmails = action.payload;
-      // console.log(state.recievedEmails);
+      console.log(state.recievedEmails);
 
       const t1 = state.recievedEmails;
       let counter = 0;
@@ -53,9 +52,25 @@ const inboxSlice = createSlice({
         return item.id !== id;
       });
     },
-   
-   
-    
+    openBox(state, action) {
+      if (action.payload === "sentbox") {
+        state.sentbox = true;
+        state.compose = false;
+        state.inbox = false;
+      } else if (action.payload === "inbox") {
+        state.inbox = true;
+        state.sentbox = false;
+        state.compose = false;
+      } else {
+        state.compose = true;
+        state.sentbox = false;
+        state.inbox = false;
+      }
+    },
+    emptyInboxSentbox(state) {
+      state.sentEmails = [];
+      state.recievedEmails = [];
+    }
   },
 });
 

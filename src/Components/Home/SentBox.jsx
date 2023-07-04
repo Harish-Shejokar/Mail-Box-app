@@ -30,10 +30,10 @@ const Inbox = () => {
     // setInterval(() => {
       
       // },3000)
-        dispatch(getDataFromFireBase());
+        // dispatch(getDataFromFireBase("SentBox"));
   }, []);
 
-  useEffect(() => {}, []);
+  // useEffect(() => {}, []);
 
   return (
     <Card bg="info">

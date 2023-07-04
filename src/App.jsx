@@ -17,20 +17,22 @@ function App() {
   const dispatch = useDispatch();
 
   return (
-    <div>
+    <>
       <Header />
-      <Routes>
-        <Route path="/signup" element={<Signup />} exact />
-        <Route path="/login" element={<Login />} exact />
-        {/* Protected Routes */}
-        <Route element={<PrivateRoute />}>
-          <Route path="/" element={<Home />} exact />
-          <Route path="/sentbox" element={<SentBox />} exact />
-          <Route path="/message" element={<Message />} exact />
-          <Route path="/inbox" element={<Inbox />} exact />
-        </Route>
-      </Routes>
-    </div>
+      <div className="App">
+        <Routes>
+          <Route path="/signup" element={<Signup />} exact />
+          <Route path="/login" element={<Login />} exact />
+          {/* Protected Routes */}
+          <Route element={<PrivateRoute />}>
+            <Route path="/" element={<Home />} exact />
+            <Route path="/message" element={<Message />} exact />
+            {/* <Route path="/sentbox" element={<SentBox />} exact /> */}
+            {/* <Route path="/inbox" element={<Inbox />} exact /> */}
+          </Route>
+        </Routes>
+      </div>
+    </>
   );
 }
 
