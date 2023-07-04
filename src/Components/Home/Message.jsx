@@ -15,17 +15,17 @@ const Message = () => {
     console.log(Email, id);
     try {
       const response = await axios.put(
-        `https://mailbox-e593a-default-rtdb.firebaseio.com/${Email}/${Box}/${id}.json`,
+        `https://mail-box-client-database-86603-default-rtdb.firebaseio.com/${Email}/${Box}/${id}.json`,
         {
           sender,
           reciver,
           subject,
           message,
-         id,
+          id,
           time,
           isWatched: true,
         }
-        );
+      );
         console.log("messageWatched")
     } catch (error) {
       console.log(error);
@@ -34,7 +34,7 @@ const Message = () => {
      if(!isWatched)emailWatched();
 
   return (
-    <div
+    <Container fluid
       className="d-flex flex-column"
       style={{ color: "", backgroundColor: "skyblue", height: "50vh" }}
     >
@@ -49,7 +49,7 @@ const Message = () => {
       </div>
       <hr />
       <div className="">Message:{message}</div>
-    </div>
+    </Container>
   );
 };
 

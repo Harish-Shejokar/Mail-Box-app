@@ -8,23 +8,21 @@ import { inboxAction } from "../../Store/Inbox-redux";
 const Header = () => {
   const dispatch = useDispatch();
   return (
-    <div
-      style={{ margin: "-2rem", marginBottom: "2rem", }}
-    >
+    <div style={{ margin: "-2rem", marginBottom: "2rem" }}>
       <Navbar bg="info" variant="light" className="py-3 fs-4 ">
-        <Container  className="d-flex justify-content-around ">
+        <Container className="d-flex justify-content-around ">
           <Nav className="">
             <NavLink
               className="fw-bold"
               to="/"
               style={{ color: "black", textDecoration: "none" }}
             >
-              Home
+              <span onClick={() => dispatch(inboxAction.openBox("componse"))}>Home</span>
             </NavLink>
           </Nav>
           <Nav>
             <NavLink
-               className="fw-bold"
+              className="fw-bold"
               to="/login"
               style={{ color: "black", textDecoration: "none" }}
               onClick={() => {

@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Card, Row, Col, ListGroup, Button } from "react-bootstrap";
+import { Card, Row, Col, ListGroup, Button, } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { inboxAction } from "../../Store/Inbox-redux";
 import { Link } from "react-router-dom";
@@ -20,7 +20,7 @@ const Inbox = () => {
   }, []);
 
   return (
-      <Card bg="warning">
+      <Card bg="info">
         <Card.Body>
           <Row>
             <div className="display-4 text-center">Inbox</div>
@@ -32,8 +32,8 @@ const Inbox = () => {
                 {emails.map((item) => {
                   // console.log(item);
                   return (
-                    <ListGroup.Item key={item.id} variant="light" bg="dark">
-                      <Col className="d-flex justify-content-around">
+                    <ListGroup.Item key={item.id} variant="light" className="border border-warning border-2 m-1">
+                      <Col className="d-flex justify-content-around flex-wrap">
                         <Col>
                           <Link
                             to="/message"
@@ -60,9 +60,9 @@ const Inbox = () => {
                               <Col>{item.sender}</Col>
                               <Col> {item.subject}</Col>
                               <Col>{item.time}</Col>
-                              <Col>
+                              {/* <Col>
                                 some content which should be filled here
-                              </Col>
+                              </Col> */}
                             </div>
                           </Link>
                         </Col>
@@ -70,9 +70,7 @@ const Inbox = () => {
                           id={item.id}
                           onClick={() => {
                             dispatch(inboxAction.deleteRecievedEmail(item.id));
-                            dispatch(
-                              deleteDataFromFireBase("Inbox", item.id)
-                            );
+                            dispatch(deleteDataFromFireBase("Inbox", item.id));
                           }}
                           variant="outline-danger"
                         >

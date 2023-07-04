@@ -20,7 +20,6 @@ const Home = () => {
   // console.log(unReadRecievedEmails, unReadSentEmails);
   const [compose, setCompose] = useState(false);
   const state = useSelector((state) => state.inbox);
-  const unReadSentEmails = state.unReadRecievedEmails;
   // console.log();
 
   const composeHandler = () => {
@@ -60,7 +59,7 @@ const Home = () => {
               onClick={() => dispatch(inboxAction.openBox("inbox"))}
             >
               Inbox
-              <Badge variant="info">{unReadRecievedEmails}</Badge>
+              {unReadRecievedEmails > 0 && <Badge variant="info">{unReadRecievedEmails}</Badge>}
             </Col>
             <Col
               className="border-bottom border-2"

@@ -29,12 +29,6 @@ const inboxSlice = createSlice({
     },
     sentBoxEmails(state, action) {
       state.sentEmails = action.payload;
-      let counter2 = 0;
-      const t2 = state.sentEmails;
-      t2.map((elem) => {
-        if (elem.isWatched === false) counter2++;
-      });
-      state.unReadSentEmails = counter2;
     },
     deleteSentEmail(state, action) {
       const id = action.payload;

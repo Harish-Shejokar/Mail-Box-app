@@ -49,8 +49,8 @@ const Inbox = () => {
                 {emails.map((item) => {
                   // console.log(item);
                   return (
-                    <ListGroup.Item key={item.id} variant="info" bg="info">
-                      <Col className="d-flex justify-content-around">
+                    <ListGroup.Item key={item.id} variant="info" bg="info" className="m-1">
+                      <Col className="d-flex justify-content-around flex-wrap">
                         <Col>
                           <Link
                             to="/message"
@@ -62,24 +62,12 @@ const Inbox = () => {
                               className="d-flex justify-content-between"
                               style={{ color: "black" }}
                             >
-                              {/* {!item.isWatched && (
-                                <span
-                                  style={{
-                                    backgroundColor: "blue",
-                                    borderRadius: "25px",
-                                    width: ".5rem",
-                                    height: ".5rem",
-                                  }}
-                                  className="mx-2 mt-2"
-                                ></span>
-                              )} */}
-                              {/* <Badge bg="info" style={{color:"skyblue"}}>0</Badge> */}
                               <Col>{item.reciver}</Col>
                               <Col> {item.subject}</Col>
                               <Col>{item.time}</Col>
                               {/* <Col> {item.message.slice(0,20)}</Col> */}
 
-                              <Col>some content which </Col>
+                              {/* <Col>some content which </Col> */}
                             </div>
                           </Link>
                         </Col>
